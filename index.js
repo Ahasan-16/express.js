@@ -1,28 +1,48 @@
 var express=require('express');
 var app=express();
 
-//simple get request
-app.get('/one',function(req,res){
-    res.end("This is simple get request");
-})
-
-//url er bitor je query pass kori sei parameter niye ki bhabe kaj korbo
-app.get('/two',function(req,res){
-
-    //ei query er pore kon parameter ta dhorbo tar name,ei gola url e set kore
-    //formate ta ei rkm localhost:8080/two?firstName=Mohammad&lastName=Ahasan
-    let firstname=req.query.firstName;
-    let lastname= req.query.lastName;
-    res.end(firstname+ " "+ lastname);
+//simple post request
+app.post('/one',function(req,res){
+    res.end("this is simple post request");
+});
+//kibhabe query maddome url teke data nibo
+app.post('/two',function(req,res){
+    let username=req.query.userName;
+    let password=req.query.passWord;
+    res.send(username+" "+password);
+});
+//header er data kibhabe access korbo,je gola postman e set kora take
+app.post('/three',function(req,res){
+    let username=req.header("userName");
+    let password=req.header("passWord");
+    res.send(username+" "+password);
 });
 
-//postman e header data set kore oi gola kibhabe use korbo
-app.get('/three',function(req,res){
-   //firstName abong lastName postman er header section jai add kora laage
-    let firstname= req.header("firstName");
-   let lastname= req.header("lastName");
-   res.end(firstname+ " "+ lastname);
-})
+//postman er body te json data diye oi data kibhabe niye asbo
+//npm install body-parser
+var bodyparser=require('body-parser');
+app.use(bodyparser.json());
+app.post('/four',function(req,res){
+    let jsonData=req.body;
+    //specific ekta o nite pari
+    // let name=jsonData["name"];
+    let jsonString=JSON.stringify(jsonData);
+    res.send(jsonString);
+});
+
+
+//postman er body te multipart form-data niye asbo
+//npm install --save multer
+var multer=require('multer');
+var multer=multer();
+app.use(multer.array());
+app.use(express.static('public'));
+app.post('/five',function(req,res){
+     let jsonData=req.body;
+     res.send(JSON.stringify(jsonData));
+});
+
+
 
 app.listen(8080,function(){
     console.log("Server started on port 8080");
