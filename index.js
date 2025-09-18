@@ -2,8 +2,10 @@ var express=require('express');
 var app=express();
 
 
-app.use(function(req,res,next){
-    console.log("i am middle ware");
+
+//route level e just protome kon request er jonno middleware lagbo tar route
+app.use('/login',function(req,res,next){
+    console.log("i am login middleware");
     next();
 })
 
