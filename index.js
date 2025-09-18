@@ -1,81 +1,28 @@
-var express = require('express');
-var app= express();
+var express=require('express');
+var app=express();
 
-//simple string response get otoba post er sahajje ,res parameter diye send er maddome response dea jai
+//simple get request
 app.get('/one',function(req,res){
-    res.send('this is simple response');//ei ta res er body
-});
+    res.end("This is simple get request");
+})
 
-//response status code manipulation
+//url er bitor je query pass kori sei parameter niye ki bhabe kaj korbo
 app.get('/two',function(req,res){
-    res.status(406).end();
+
+    //ei query er pore kon parameter ta dhorbo tar name,ei gola url e set kore
+    //formate ta ei rkm localhost:8080/two?firstName=Mohammad&lastName=Ahasan
+    let firstname=req.query.firstName;
+    let lastname= req.query.lastName;
+    res.end(firstname+ " "+ lastname);
 });
 
-//kibhabe json response niye asbo
+//postman e header data set kore oi gola kibhabe use korbo
 app.get('/three',function(req,res){
-
-    let myJSONArry=[
-        {
-            name:"Ahasan",
-            city:"chattogram",
-            age:"25"
-        },
-        {
-            name:"B",
-            city:"dhaka",
-            age:"26"
-        },
-        {
-            name:"c",
-            city:"Rajshai",
-            age:"27"
-        }
-    ]
-    res.json(myJSONArry);//ei khane json arry pass kora lage, arrry take onk golo json object takte pare
-});
-
-//kibhabe download response create korbo
-
-app.get('/four',function(req,res){
-    res.download("./download/OIP.webp");
-});
-
-// kibhabe response redirect korbo
-
-app.get('/five',function(req,res){
-   //one path e redire korbe
-    res.redirect("http://localhost:8080/one");
-});
-
-//response header e kibhabe data rakbo
-
-app.get('/six',function(req,res){
-    //ei khane key value er majkane comma takbe dui tai double quote er moddeh
-    res.append("name","Mohammad Ahasan");
-    res.append("city","Chattogram");
-
-    //ei dea laage
-    res.status(200).end();
+   //firstName abong lastName postman er header section jai add kora laage
+    let firstname= req.header("firstName");
+   let lastname= req.header("lastName");
+   res.end(firstname+ " "+ lastname);
 })
-
-// response e kibhabe cookie set korbo
-app.get('/seven',function(req,res){
-    // res.cookie("name","Mohammad Ahasan");
-    res.cookie("city","Chattogram");
-    res.cookie("age","25");
-
-    res.status(200).end("cookies set successfully.");
-})
-
-// kibhabe cookie teke data delete korbo
-app.get('/eight',function(req,res){
-    res.clearCookie("city");
-    res.clearCookie("age");
-
-    res.status(200).end("cookies delete successfully.");
-
-})
-
 
 app.listen(8080,function(){
     console.log("Server started on port 8080");
